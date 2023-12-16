@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/home"
+        android:title="home"
+        android:icon="@drawable/home"/>
+
+    <item
+        android:id="@+id/reservations"
+        android:title="reservations"
+        android:icon="@drawable/reservations"/>
+
+    <item
+        android:id="@+id/favorites"
+        android:title="favorites"
+        android:icon="@drawable/favorites"/>
+
+    <item
+        android:id="@+id/events"
+        android:title="events"
+        android:icon="@drawable/events"/>
+
+    <item
+        android:id="@+id/discounts"
+        android:title="discounts"
+        android:icon="@drawable/discounts"/>
+
+</menu>
