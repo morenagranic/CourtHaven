@@ -197,7 +197,7 @@
         android:layout_height="match_parent"
         android:layout_marginStart="16sp"
         android:layout_marginEnd="16sp"
-        android:layout_marginBottom="72dp"
+        android:layout_marginBottom="80dp"
         tools:text=" ">
 
 
@@ -214,6 +214,15 @@
                     android:textSize="16sp"
                     android:fontFamily="@font/open_sans_bold"
                     android:layout_margin="10dp"/>
+
+                <View
+                    android:id="@+id/SplitLine_upcoming"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="-6dp"
+                    android:layout_marginBottom="6dp"
+                    android:background="@color/purple"
+                    />
 
 
                 <androidx.cardview.widget.CardView
@@ -715,7 +724,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
-                    android:layout_marginBottom="3dp"
+                    android:layout_marginBottom="10dp"
                     android:backgroundTint="@color/lighter_gray"
                     app:cardCornerRadius="8dp">
 
