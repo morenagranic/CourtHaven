@@ -1,5 +1,6 @@
 package courthaven.pack;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,12 @@ import androidx.lifecycle.ViewModelProvider;
 public class SignInFragment extends Fragment {
 
     private AuthenticationViewModel viewModel;
+    private Context mContext;
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = context;
+    }
 
     @Nullable
     @Override
@@ -45,11 +52,18 @@ public class SignInFragment extends Fragment {
     }
 
     void attemptSignIn(String email, String password) {
-        if (email.equals("nesto@") && password.equals("123")) {
-            viewModel.setSignInSuccessful(true);
-            ((MainActivity) requireActivity()).replaceFragment(new homeFragment());
+        DataBaseHelper dataBaseHelper = new DataBaseHelper(mContext);
+        if (dataBaseHelper.dataExists("USER", "email", email)){
+            if (dataBaseHelper.dataMatches("USER", "email", email, "password", password)){
+                Toast.makeText(requireContext(), "Sign-in successful", Toast.LENGTH_SHORT).show();
+                viewModel.setSignInSuccessful(true);
+                ((MainActivity) requireActivity()).replaceFragment(new homeFragment());
+            }else {
+                Toast.makeText(requireContext(), "Wrong password", Toast.LENGTH_SHORT).show();
+                viewModel.setSignInSuccessful(false);
+            }
         } else {
-            Toast.makeText(requireContext(), "Sign-in failed", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "User with provided email does not exist", Toast.LENGTH_SHORT).show();
             viewModel.setSignInSuccessful(false);
         }
     }

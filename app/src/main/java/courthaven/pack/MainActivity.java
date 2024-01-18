@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
         currentFragment = new SignInFragment();
         replaceFragment(currentFragment);
 
+
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             if (isSignInSuccessful()) {
                 handleNavigation(item.getItemId());
