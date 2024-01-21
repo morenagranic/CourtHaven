@@ -2,6 +2,8 @@ package courthaven.pack;
 
 public class Court {
     int id;
+    int distance;
+
     String name;
     String address;
     String sport;
@@ -22,6 +24,7 @@ public class Court {
     public String toString() {
         return "Court{" +
                 "id=" + id +
+
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
                 ", sport='" + sport + '\'' +
@@ -29,9 +32,11 @@ public class Court {
                 '}';
     }
 
-    public Court(int id, String name, String address, String sport, int id_admin) {
+    public Court(int id, String name, String address, String sport, int id_admin, int distance) {
         this.id = id;
         this.name = name;
+        this.distance = distance;
+
         this.address = address;
         this.sport = sport;
         this.id_admin = id_admin;
@@ -40,6 +45,14 @@ public class Court {
     public Court() {
     }
 
+
+    public int getDistance() {
+        return distance;
+    }
+
+    public void setDistance(int distance) {
+        this.distance = distance;
+    }
     public int getId() {
         return id;
     }

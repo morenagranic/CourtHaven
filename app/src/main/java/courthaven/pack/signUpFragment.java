@@ -69,10 +69,11 @@ public class signUpFragment extends Fragment {
 
                 if (success) {
                     Toast.makeText(mContext, "User added to database", Toast.LENGTH_SHORT).show();
+                    viewModel.setSignUpSuccessful(true);
                 } else {
                     Toast.makeText(mContext, "Error adding user to the database", Toast.LENGTH_SHORT).show();
                 }
-                navigateToHomeScreen();
+                navigateToSignInScreen();
             }
 
         } else {
@@ -81,10 +82,10 @@ public class signUpFragment extends Fragment {
         }
     }
 
-    private void navigateToHomeScreen() {
+    private void navigateToSignInScreen() {
         if (requireActivity() instanceof MainActivity) {
             MainActivity mainActivity = (MainActivity) requireActivity();
-            mainActivity.replaceFragment(new homeFragment());
+            mainActivity.replaceFragment(new SignInFragment());
         }
     }
 

@@ -89,7 +89,6 @@ public class courtAdapter extends ArrayAdapter<Court> {
         // Set OnClickListener for the book_icon
         bookIcon.setOnClickListener(v -> {
             openBookCourtFragment(currentCourt, v);
-            //showDateDialog(currentCourt);
         });
 
 
@@ -204,19 +203,5 @@ public class courtAdapter extends ArrayAdapter<Court> {
         dbHelper.updateUserFavorites(userId, updatedFavorites);
     }
 
-    private void showDateDialog(Court court) {
-        final Calendar calendar=Calendar.getInstance();
-        DatePickerDialog.OnDateSetListener dateSetListener=new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                calendar.set(Calendar.YEAR,year);
-                calendar.set(Calendar.MONTH,month);
-                calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
-                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("dd-MM-yyyy");
-                Toast.makeText(mContext, simpleDateFormat.format(calendar.getTime()), Toast.LENGTH_SHORT).show();
-            }
-        };
-        new DatePickerDialog(mContext,dateSetListener,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
-    }
 
 }

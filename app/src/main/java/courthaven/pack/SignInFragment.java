@@ -75,6 +75,7 @@ public class SignInFragment extends Fragment {
     }
 
     public boolean isSignInSuccessful() {
-        return viewModel.isSignInSuccessful();
+        boolean success = viewModel.isSignInSuccessful() || viewModel.isSignUpSuccessful();
+        return success;
     }
 }

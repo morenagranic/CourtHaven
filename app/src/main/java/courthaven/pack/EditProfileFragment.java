@@ -63,7 +63,5 @@ public class EditProfileFragment extends Fragment {
             // You might also want to update the UI or show a success message
             openHomeFragment();
 
-
     }
-
 }

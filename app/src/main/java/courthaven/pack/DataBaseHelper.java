@@ -10,6 +10,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.content.SharedPreferences;
 import android.widget.DatePicker;
 import android.widget.Toast;
+import android.provider.BaseColumns;
+import android.util.Log;
 
 
 import androidx.annotation.Nullable;
@@ -17,6 +19,7 @@ import androidx.annotation.Nullable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Arrays;
 import java.util.List;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
@@ -30,9 +33,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         String createUserTable = "create table USER (id_user integer primary key autoincrement, name text, description text, email text, password text,courts text, isAdmin boolean);";
-        String createCourtTable = "create table COURT (id_court integer primary key autoincrement, name text, address text, sport text, id_admin integer, foreign key(id_admin) references USER(id_user));";
+        String createCourtTable = "create table COURT (id_court integer primary key autoincrement, name text, address text, sport text, distance integer, id_admin integer, foreign key(id_admin) references USER(id_user));";
         String createBookingTable = "create table BOOKING (id_booking integer primary key autoincrement, cost real, id_user integer,  id_court integer, foreign key(id_user) references USER(id_user), foreign key(id_court) references COURT(id_court));";
         String createDateTimeTable = "create table DATE_TIME (id_dt integer primary key autoincrement, day text, ddate text, ttime int, id_booking integer, foreign key(id_booking) references BOOKING(id_booking));";
+
 
         db.execSQL("pragma foreign_keys = on;");
         db.execSQL(createUserTable);
@@ -44,7 +48,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.execSQL("begin transaction;");
         for (int i = 1; i < 13; i++){
             String sport = (i % 2 == 0) ? "basketball" : ((i % 3 == 0) ? "football" : "tennis");
-            db.execSQL("insert into COURT values ("+ i +", \"Court "+ i +"\", \"Street "+ i +"\", \""+ sport +"\", 0);");
+            int distance = 10 * i;
+            db.execSQL("INSERT INTO COURT VALUES (" + i + ", 'Court " + i + "', 'Street " + i + "', '" + sport + "',  " + distance + ",0);");
         }
         db.execSQL("commit;");
 
@@ -159,7 +164,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    public ArrayList<Court> getCourts(){
+    public ArrayList<Court> getCourts() {
         ArrayList<Court> returnList = new ArrayList<>();
 
         //get data from the database
@@ -168,21 +173,26 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
 
-        if (cursor.moveToFirst()){
-            //loop through the cursor (the results) and create new court objects, put them into the return list
+        if (cursor.moveToFirst()) {
+            // Loop through the cursor (the results) and create new court objects, put them into the return list
             do {
-                int id_court = cursor.getInt(0);
-                String name = cursor.getString(1);
-                String address = cursor.getString(2);
-                String sport = cursor.getString(3);
-                int id_admin = cursor.getInt(4);
+                @SuppressLint("Range") int id_court = cursor.getInt(cursor.getColumnIndex("id_court"));
+                @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex("name"));
+                @SuppressLint("Range") String address = cursor.getString(cursor.getColumnIndex("address"));
+                @SuppressLint("Range") String sport = cursor.getString(cursor.getColumnIndex("sport"));
+                @SuppressLint("Range") int id_admin = cursor.getInt(cursor.getColumnIndex("id_admin"));
+                // Retrieve the distance from the cursor
+                @SuppressLint("Range") int distance = cursor.getInt(cursor.getColumnIndex("distance"));
 
-                Court newCourt = new Court(id_court, name, address, sport, id_admin);
+                // Create a Court object with the distance
+                Court newCourt = new Court(id_court, name, address, sport, id_admin,distance);
+                // Set the distance in the Court object
+
                 returnList.add(newCourt);
             } while (cursor.moveToNext());
 
         } else {
-            //failiure - do not add anything to the list
+            // Failure - do not add anything to the list
         }
 
         cursor.close();
@@ -277,6 +287,106 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         db.close();
     }
+    public class CourtEntry implements BaseColumns {
+        public static final String TABLE_NAME = "court";
+
+        public static final String COLUMN_ID_COURT = "id_court";
+
+        public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_ADDRESS = "address";
+        public static final String COLUMN_SPORT = "sport";
+
+
+
+        // Add other columns as needed
+    }
+    public ArrayList<Court> getFilteredCourts(String[] selectedSports, int maxDistance) {
+        ArrayList<Court> filteredCourts = new ArrayList<>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Define the columns you want to retrieve
+        String[] projection = {
+                "id_court",
+                "name",
+                "address",
+                "sport",
+                "distance" // Include the new column
+        };
+
+        // Define the WHERE clause based on selected sports and maximum distance
+        StringBuilder selection = new StringBuilder();
+        List<String> selectionArgsList = new ArrayList<>();
+
+        for (int i = 0; i < selectedSports.length; i++) {
+            selection.append("sport = ?");
+            selectionArgsList.add(selectedSports[i]);
+
+            if (i < selectedSports.length - 1) {
+                selection.append(" OR ");
+            }
+        }
+
+        if (maxDistance > 0) {
+            if (selection.length() > 0) {
+                selection.append(" AND ");
+            }
+            selection.append("distance <= ?");
+            selectionArgsList.add(String.valueOf(maxDistance));
+        }
+
+        // Convert the list to an array for the query method
+        String[] selectionArgs = new String[selectionArgsList.size()];
+        selectionArgsList.toArray(selectionArgs);
+
+        Log.d("DataBaseHelper", "SQL query: " + selection.toString());
+        Log.d("DataBaseHelper", "Selection Args: " + Arrays.toString(selectionArgs));
+
+        // Query the database
+        Cursor cursor = db.query(
+                "COURT", // Table name directly used here
+                projection,
+                selection.toString(),
+                selectionArgs,
+                null,
+                null,
+                null
+        );
+
+        // Process the cursor and populate the filteredCourts list
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                // Retrieve column indices
+                int idIndex = cursor.getColumnIndexOrThrow("id_court");
+                int nameIndex = cursor.getColumnIndexOrThrow("name");
+                int addressIndex = cursor.getColumnIndexOrThrow("address");
+                int sportIndex = cursor.getColumnIndexOrThrow("sport");
+                // Add other column indices as needed
+
+                // Retrieve values from the cursor
+                int id = cursor.getInt(idIndex);
+                String name = cursor.getString(nameIndex);
+                String address = cursor.getString(addressIndex);
+                String sport = cursor.getString(sportIndex);
+                int distance = cursor.getInt(cursor.getColumnIndexOrThrow("distance")); // Retrieve distance
+
+                // Check if the distance is within the specified maximum distance
+                if (maxDistance <= 0 || distance <= maxDistance) {
+                    // Create a Court object and add it to the list
+                    Court court = new Court(id, name, address, sport, 0, distance); // Include the new distance value
+                    filteredCourts.add(court);
+                }
+            } while (cursor.moveToNext());
+
+            // Close the cursor
+            cursor.close();
+        }
+
+        // Close the database
+        db.close();
+
+        return filteredCourts;
+    }
 
     public ArrayList<String> getTimes(String ddate){
         ArrayList<String> returnList = new ArrayList<>();
@@ -297,18 +407,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
 
         } else {
-            //failiure - do not add anything to the list
+            //failure - do not add anything to the list
         }
 
         cursor.close();
         db.close();
         return returnList;
     }
-
 }
-
-
-
-
-
-

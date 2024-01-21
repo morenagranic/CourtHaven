@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light_gray"
-    android:orientation="vertical"
-    tools:context=".homeFragment">
+    android:orientation="vertical">
 
     <!-- top bar -->
     <RelativeLayout
@@ -28,15 +26,15 @@
             android:layout_marginBottom="4dp"
             android:textSize="20sp"
             android:fontFamily="@font/open_sans_bold"
-            android:text="@string/home"
+            android:text="Filtered"
             android:textColor="@color/white"/>
 
 
         <ImageView
-            android:id="@+id/filterButton"
+            android:id="@+id/cancel_icon1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/filter"
+            android:src="@drawable/cancel"
             android:contentDescription="@string/blank"
             android:layout_alignParentEnd="true"
             android:layout_alignTop="@+id/homeText"
@@ -45,16 +43,7 @@
             android:layout_marginEnd="8dp"
             app:tint="@color/white"/>
 
-        <ImageView
-            android:id="@+id/search_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/search"
-            android:contentDescription="@string/blank"
-            android:layout_alignTop="@+id/homeText"
-            android:layout_alignBottom="@+id/homeText"
-            android:layout_toStartOf="@id/filterButton"
-            app:tint="@color/white"/>
+
 
     </RelativeLayout>
 
@@ -78,13 +67,10 @@
         android:background="@color/purple"
         />
 
-
     <ListView
         android:id="@+id/courts_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="84dp" />
 
-
 </LinearLayout>
-
