@@ -3,15 +3,20 @@ package courthaven.pack;
 public class User {
     int id;
     String name;
+    String description;
     String email;
     String password;
+
+    String courts;
     boolean isAdmin = false;
 
-    public User(int id, String name, String email, String password, boolean isAdmin) {
+    public User(int id, String name, String description, String email, String password, String courts,boolean isAdmin) {
         this.id = id;
         this.name = name;
+        this.description=description;
         this.email = email;
         this.password = password;
+        this.courts= courts;
         this.isAdmin = isAdmin;
     }
 
@@ -23,8 +28,10 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", courts='" + name + '\'' +
                 ", isAdmin=" + isAdmin +
                 '}';
     }
@@ -43,6 +50,22 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCourts() {
+        return courts;
+    }
+
+    public void setCourts(String courts) {
+        this.courts = courts;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getEmail() {

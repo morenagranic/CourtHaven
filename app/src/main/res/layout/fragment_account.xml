@@ -35,26 +35,29 @@
             android:layout_gravity="center_horizontal"/>
 
         <TextView
+            android:id="@+id/username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/open_sans_bold"
+            android:gravity="center_horizontal"
             android:text="Username"
-            android:gravity="center_horizontal"
-            android:textSize="24dp"
-            android:fontFamily="@font/open_sans_bold"/>
+            android:textSize="24dp" />
+
         <TextView
+            android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="email@example.com"
+            android:fontFamily="@font/open_sans_regular"
             android:gravity="center_horizontal"
-            android:textSize="16dp"
-            android:fontFamily="@font/open_sans_regular"/>
+            android:text="email@example.com"
+            android:textSize="16dp" />
 
         <RelativeLayout
             android:layout_width="270dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="24dp">
-            
+
             <ImageView
                 android:id="@+id/edit_icon"
                 android:layout_width="wrap_content"

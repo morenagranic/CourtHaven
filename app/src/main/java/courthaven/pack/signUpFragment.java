@@ -1,6 +1,5 @@
 package courthaven.pack;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,6 +18,7 @@ public class signUpFragment extends Fragment {
 
     private AuthenticationViewModel viewModel;
     private Context mContext;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -57,22 +57,20 @@ public class signUpFragment extends Fragment {
         if (isValidEmail(email) && isValidPassword(password, repeatPassword)) {
             viewModel.setSignUpSuccessful(true);
 
-            String name = email.substring(0, email.indexOf('@'));
-            User user = new User(0, name, email, password, false);
+            User user = new User(0, "","", email, password,"", false); // Set an empty string for the name
 
             DataBaseHelper dataBaseHelper = new DataBaseHelper(mContext);
 
-            if (dataBaseHelper.dataExists("USER", "email", email)){
+            if (dataBaseHelper.dataExists("USER", "email", email)) {
                 Toast.makeText(requireContext(), "Email is already taken", Toast.LENGTH_SHORT).show();
                 viewModel.setSignUpSuccessful(false);
-            }
-            else {
+            } else {
                 boolean success = dataBaseHelper.addUser(user);
 
                 if (success) {
                     Toast.makeText(mContext, "User added to database", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(mContext, "error", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "Error adding user to the database", Toast.LENGTH_SHORT).show();
                 }
                 navigateToHomeScreen();
             }

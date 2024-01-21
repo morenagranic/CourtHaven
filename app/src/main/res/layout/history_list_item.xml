@@ -20,7 +20,7 @@
 
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/pic"
+                android:id="@+id/pic3"
                 android:layout_width="150dp"
                 android:layout_height="100dp"
                 android:layout_marginTop="12dp"
@@ -28,7 +28,6 @@
                 android:layout_marginStart="12dp"
                 app:cardCornerRadius="8dp">
                 <ImageView
-                    android:id="@+id/imageView_court"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/basketball_court"
@@ -36,66 +35,47 @@
             </androidx.cardview.widget.CardView>
 
             <TextView
-                android:id="@+id/court_name"
+                android:id="@+id/court3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toEndOf="@+id/pic"
-                android:layout_alignTop="@+id/pic"
+                android:layout_toEndOf="@+id/pic3"
+                android:layout_alignTop="@+id/pic3"
                 android:layout_marginStart="8dp"
+                android:text="Court"
                 android:textSize="20sp"
                 android:fontFamily="@font/open_sans_semi_bold"/>
 
             <TextView
-                android:id="@+id/court_address"
+                android:id="@+id/owner3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/court_name"
+                android:layout_below="@+id/court3"
                 android:layout_marginStart="8dp"
-                android:layout_toEndOf="@+id/pic"
+                android:layout_toEndOf="@+id/pic3"
+                android:text="Owner"
                 android:textSize="12sp"
                 android:fontFamily="@font/open_sans_light"
                 />
 
             <View
-                android:id="@+id/SplitLine_hor"
+                android:id="@+id/SplitLine_hor3"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_margin="8dp"
                 android:background="@color/light_gray"
-                android:layout_toEndOf="@+id/pic"
-                android:layout_below="@+id/court_address"
+                android:layout_toEndOf="@+id/pic3"
+                android:layout_below="@+id/owner3"
                 />
-
             <TextView
-                android:id="@+id/court_sport"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/SplitLine_hor"
+                android:text="Wednesday, 13 December - 11:30"
+                android:layout_toEndOf="@+id/pic3"
+                android:layout_below="@id/SplitLine_hor3"
                 android:layout_marginStart="8dp"
-                android:layout_toEndOf="@+id/pic"
-                android:textSize="12sp"
-                android:fontFamily="@font/open_sans_light"
-                />
-
-            <ImageView
-                android:id="@+id/star_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/favorites"
-                android:layout_alignTop="@+id/pic"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="12dp"/>
-
-            <ImageView
-                android:id="@+id/book_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/schedule"
-                android:layout_below="@+id/star_icon"
-                android:layout_alignParentEnd="true"
-                android:layout_alignBottom="@+id/pic"
-                android:layout_marginEnd="16dp"/>
+                android:fontFamily="@font/open_sans_regular"/>
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
+
 
 </LinearLayout>

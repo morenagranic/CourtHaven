@@ -14,8 +14,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-public class SignInFragment extends Fragment {
 
+
+public class SignInFragment extends Fragment {
+    public static int UserId = 0;
     private AuthenticationViewModel viewModel;
     private Context mContext;
     @Override
@@ -53,12 +55,16 @@ public class SignInFragment extends Fragment {
 
     void attemptSignIn(String email, String password) {
         DataBaseHelper dataBaseHelper = new DataBaseHelper(mContext);
-        if (dataBaseHelper.dataExists("USER", "email", email)){
-            if (dataBaseHelper.dataMatches("USER", "email", email, "password", password)){
+        if (dataBaseHelper.dataExists("USER", "email", email)) {
+            if (dataBaseHelper.dataMatches("USER", "email", email, "password", password)) {
                 Toast.makeText(requireContext(), "Sign-in successful", Toast.LENGTH_SHORT).show();
                 viewModel.setSignInSuccessful(true);
+
+                // Set the UserId to the actual user ID from the database
+                UserId = dataBaseHelper.getUserId(email, password);
+
                 ((MainActivity) requireActivity()).replaceFragment(new homeFragment());
-            }else {
+            } else {
                 Toast.makeText(requireContext(), "Wrong password", Toast.LENGTH_SHORT).show();
                 viewModel.setSignInSuccessful(false);
             }

@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginStart="16sp"
+    android:layout_marginEnd="16sp"
+    android:layout_marginBottom="80dp"
+    tools:text=" ">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/light_gray"
+        android:padding="16dp"
+        android:orientation="vertical">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/pic1"
+                android:layout_width="150dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                android:layout_marginStart="12dp"
+                app:cardCornerRadius="8dp">
+                <ImageView
+                    android:id="@+id/imageView_court"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/basketball_court"
+                    android:contentDescription="basketball court"/>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/court1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/pic1"
+                android:layout_alignTop="@+id/pic1"
+                android:layout_marginStart="8dp"
+                android:text="Court"
+                android:textSize="20sp"
+                android:fontFamily="@font/open_sans_semi_bold"/>
+
+            <TextView
+                android:id="@+id/address1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/court1"
+                android:layout_marginStart="8dp"
+                android:layout_toEndOf="@+id/pic1"
+                android:text="Address"
+                android:textSize="12sp"
+                android:fontFamily="@font/open_sans_light"
+                />
+
+            <View
+                android:id="@+id/SplitLine_hor1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="8dp"
+                android:background="@color/light_gray"
+                android:layout_toEndOf="@+id/pic1"
+                android:layout_below="@+id/address1"
+                />
+
+            <ImageView
+                android:id="@+id/cancel_icon1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/cancel"
+                android:layout_alignTop="@+id/pic1"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="12dp"
+                app:tint="@color/red"/>
+            <TextView
+                android:id="@+id/date_time_text1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Friday, 22 December - 15:30"
+                android:layout_toEndOf="@+id/pic1"
+                android:layout_below="@id/SplitLine_hor1"
+                android:layout_marginStart="8dp"
+                android:fontFamily="@font/open_sans_bold"/>
+        </RelativeLayout>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="20dp"
+            android:padding="4dp"
+            app:cardCornerRadius="8dp">
+
+
+            <GridView
+                android:id="@+id/times_grid"
+                android:layout_width="match_parent"
+                android:layout_height="320dp"
+                android:numColumns="5" />
+
+        </androidx.cardview.widget.CardView>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <RadioButton
+                android:id="@+id/btn_30min"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="6dp"
+                android:layout_marginBottom="6dp"
+                android:fontFamily="@font/open_sans_semi_bold"
+                android:text="30 mins"
+                android:textSize="16sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:text="10.50 EUR"
+                android:textSize="16sp"
+                android:layout_margin="6dp"
+                android:layout_alignBaseline="@+id/btn_30min"
+                android:fontFamily="@font/open_sans_regular"
+                android:textColor="@color/purple"
+                />
+            <RadioButton
+                android:id="@+id/btn_1hr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btn_30min"
+                android:layout_margin="6dp"
+                android:textSize="16sp"
+                android:fontFamily="@font/open_sans_semi_bold"
+                android:text="1 hr"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:text="21.00 EUR"
+                android:textSize="16sp"
+                android:layout_margin="6dp"
+                android:layout_alignBaseline="@+id/btn_1hr"
+                android:fontFamily="@font/open_sans_regular"
+                android:textColor="@color/purple"
+                />
+            <RadioButton
+                android:id="@+id/btn_1hr30min"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btn_1hr"
+                android:layout_margin="6dp"
+                android:textSize="16sp"
+                android:fontFamily="@font/open_sans_semi_bold"
+                android:text="1 hr 30 mins"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:text="31.50 EUR"
+                android:textSize="16sp"
+                android:layout_margin="6dp"
+                android:layout_alignBaseline="@+id/btn_1hr30min"
+                android:fontFamily="@font/open_sans_regular"
+                android:textColor="@color/purple"
+                />
+            <RadioButton
+                android:id="@+id/btn_2hr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btn_1hr30min"
+                android:layout_margin="6dp"
+                android:textSize="16sp"
+                android:fontFamily="@font/open_sans_semi_bold"
+                android:text="2 hr"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:text="42.00 EUR"
+                android:textSize="16sp"
+                android:layout_margin="6dp"
+                android:layout_alignBaseline="@+id/btn_2hr"
+                android:fontFamily="@font/open_sans_regular"
+                android:textColor="@color/purple"
+                />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/date_time_text2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:layout_marginTop="36dp"
+            android:gravity="center_horizontal"
+            android:text="Friday, 22 December: 15:30 - 17:00"
+            android:fontFamily="@font/open_sans_bold"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="18dp"
+            android:textSize="18sp"
+            android:gravity="center_horizontal"
+            android:text="Book court?"
+            android:fontFamily="@font/open_sans_semi_bold"
+            />
+
+        <Button
+            android:id="@+id/total_btn"
+            android:layout_width="match_parent"
+            android:layout_marginHorizontal="40dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/purple"
+            android:elevation="5dp"
+            android:text="Total = 31.50 EUR"
+            android:padding="12dp"
+            android:textSize="16dp"
+            android:fontFamily="@font/open_sans_semi_bold"
+            />
+
+        <Button
+            android:id="@+id/cancel_btn"
+            android:layout_width="match_parent"
+            android:layout_marginHorizontal="40dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/gray"
+            android:elevation="5dp"
+            android:layout_marginTop="4dp"
+            android:text="Cancel"
+            android:padding="12dp"
+            android:textSize="16dp"
+            android:fontFamily="@font/open_sans_semi_bold"
+            />
+
+
+    </LinearLayout>
+
+</ScrollView>
+

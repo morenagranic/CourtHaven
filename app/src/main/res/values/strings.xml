@@ -7,5 +7,7 @@
 
     <string name="blank"> </string>
     <string name="selected_date">Monday, 18 December</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

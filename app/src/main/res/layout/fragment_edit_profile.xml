@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/editProfileFragment"
+    android:background="@color/light_gray"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="40dp"
+        android:layout_gravity="center"
+        android:background="@drawable/round_rectangle"
+        app:cardCornerRadius="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:text="EDIT PROFILE"
+                android:textSize="20sp"
+                android:fontFamily="@font/open_sans_bold"/>
+
+            <EditText
+                android:id="@+id/etChangeName"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="Change Name"
+                android:inputType="text"
+                android:fontFamily="@font/open_sans_regular"
+                android:layout_marginBottom="16dp"/>
+
+            <EditText
+                android:id="@+id/etChangeDescription"
+                android:layout_width="match_parent"
+                android:layout_height="164dp"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="@font/open_sans_regular"
+                android:hint="Change Description"
+                android:inputType="textMultiLine"
+                android:minLines="3"/>
+
+            <Button
+                android:id="@+id/saveChangesButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/purple"
+                android:fontFamily="@font/open_sans_semi_bold"
+                android:text="Save Changes" />
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_gravity="bottom"
+        android:elevation="20dp"
+        android:background="@color/light_gray"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
