@@ -42,6 +42,7 @@
                 android:layout_toEndOf="@+id/pic"
                 android:layout_alignTop="@+id/pic"
                 android:layout_marginStart="8dp"
+                android:text="Court"
                 android:textSize="20sp"
                 android:fontFamily="@font/open_sans_semi_bold"/>
 
@@ -52,6 +53,7 @@
                 android:layout_below="@+id/court_name"
                 android:layout_marginStart="8dp"
                 android:layout_toEndOf="@+id/pic"
+                android:text="Address (Distance)"
                 android:textSize="12sp"
                 android:fontFamily="@font/open_sans_light"
                 />
@@ -73,6 +75,7 @@
                 android:layout_below="@+id/SplitLine_hor"
                 android:layout_marginStart="8dp"
                 android:layout_toEndOf="@+id/pic"
+                android:text="Sport"
                 android:textSize="12sp"
                 android:fontFamily="@font/open_sans_light"
                 />

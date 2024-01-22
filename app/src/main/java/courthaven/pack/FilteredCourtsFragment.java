@@ -22,9 +22,18 @@ import java.util.Calendar;
 
 public class FilteredCourtsFragment extends Fragment {
 
+
+
+    static String selectedDate = homeFragment.getSelectedDate();
     private Context mContext;
     private int maxDistance = 1000; // Default max distance
+    public static String getSelectedDate() {
+        return selectedDate;
+    }
 
+    public static void setSelectedDate(String selectedDate) {
+        FilteredCourtsFragment.selectedDate = selectedDate;
+    }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -78,8 +87,11 @@ public class FilteredCourtsFragment extends Fragment {
 
 
         TextView dateText = rootView.findViewById(R.id.date_text);
-        dateText.setOnClickListener(v -> showDateDialog());
+        dateText.setText(formatDate(selectedDate));
 
+        dateText.setOnClickListener(v -> {
+            setSelectedDate(chooseDate(dateText));
+        });
         return rootView;
     }
 
@@ -113,7 +125,7 @@ public class FilteredCourtsFragment extends Fragment {
     }
 
 
-    private void showDateDialog() {
+    private String chooseDate(TextView dateText) {
         final Calendar calendar=Calendar.getInstance();
         DatePickerDialog.OnDateSetListener dateSetListener=new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -122,9 +134,25 @@ public class FilteredCourtsFragment extends Fragment {
                 calendar.set(Calendar.MONTH,month);
                 calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
                 SimpleDateFormat simpleDateFormat=new SimpleDateFormat("dd-MM-yyyy");
-                Toast.makeText(mContext, simpleDateFormat.format(calendar.getTime()), Toast.LENGTH_SHORT).show();
+                selectedDate = simpleDateFormat.format(calendar.getTime());
+                dateText.setText(formatDate(selectedDate));
             }
         };
         new DatePickerDialog(mContext,dateSetListener,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
+        return selectedDate;
+    }
+
+
+    private String formatDate(String date){
+        DataBaseHelper db = new DataBaseHelper(mContext);
+        String[] months = {
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+        };
+        int numDay = Integer.parseInt(date.split("-")[0]);
+        int index = Integer.parseInt(date.split("-")[1]) - 1;
+        String day = db.getDateTimeDay(date);
+
+        return day + ", " + numDay + " " + months[index];
     }
 }

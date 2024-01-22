@@ -4,16 +4,13 @@ package courthaven.pack;
 
 
 
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,11 +19,13 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class courtAdapter extends ArrayAdapter<Court> {
+
+    String selectedDate = new String();
+    public String getSelectedDate() { return selectedDate; }
+    public void setSelectedDate(String selectedDate) { this.selectedDate = selectedDate; }
 
     private Context mContext;
     private ArrayList<Court> courtsList = new ArrayList<>();
@@ -88,15 +87,19 @@ public class courtAdapter extends ArrayAdapter<Court> {
 
         // Set OnClickListener for the book_icon
         bookIcon.setOnClickListener(v -> {
-            openBookCourtFragment(currentCourt, v);
+            selectedDate = homeFragment.getSelectedDate();
+            openBookCourtFragment(currentCourt, v, selectedDate, SignInFragment.UserId);
         });
 
 
         return listItem;
     }
 
-    private void openBookCourtFragment(Court court, View v) {
+    private void openBookCourtFragment(Court court, View v, String date, int userId) {
         Fragment fragment = new bookCourtFragment();
+        ((bookCourtFragment) fragment).setCourt(court);
+        ((bookCourtFragment) fragment).setSelectedDate(String.valueOf(date));
+        ((bookCourtFragment) fragment).setUserId(userId);
         ((FragmentActivity) v.getContext()).getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.anim_from_bottom, androidx.navigation.ui.R.anim.nav_default_pop_exit_anim)
                 .replace(R.id.frameLayout, fragment)

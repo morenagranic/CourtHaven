@@ -9,5 +9,7 @@
     <color name="gray">#FFafafaf</color>
     <color name="yellow">#FFDDAA33</color>
     <color name="red">#FF992233</color>
+    <color name="light_red">#FFcc5566</color>
+
 
 </resources>

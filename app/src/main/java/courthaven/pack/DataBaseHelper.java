@@ -34,15 +34,19 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         String createUserTable = "create table USER (id_user integer primary key autoincrement, name text, description text, email text, password text,courts text, isAdmin boolean);";
         String createCourtTable = "create table COURT (id_court integer primary key autoincrement, name text, address text, sport text, distance integer, id_admin integer, foreign key(id_admin) references USER(id_user));";
-        String createBookingTable = "create table BOOKING (id_booking integer primary key autoincrement, cost real, id_user integer,  id_court integer, foreign key(id_user) references USER(id_user), foreign key(id_court) references COURT(id_court));";
-        String createDateTimeTable = "create table DATE_TIME (id_dt integer primary key autoincrement, day text, ddate text, ttime int, id_booking integer, foreign key(id_booking) references BOOKING(id_booking));";
-
+        String createBookingTable = "create table BOOKING (id_booking integer primary key autoincrement, cost real, duration integer, id_user integer, foreign key(id_user) references USER(id_user));";
+        String createDateTimeTable = "create table DATE_TIME (id_dt integer primary key autoincrement, day text, ddate text, ttime text);";
+        String createBookedDTCTable = "create table BOOKED_DATE_TIME_COURT (id_dt integer, id_court integer, id_booking integer, \n" +
+                "                                      foreign key(id_dt) references DATE_TIME(id_dt),\n" +
+                "                                      foreign key(id_court) references COURT(id_court),\n" +
+                "                                      foreign key(id_booking) references BOOKING(id_booking));";
 
         db.execSQL("pragma foreign_keys = on;");
         db.execSQL(createUserTable);
         db.execSQL(createCourtTable);
         db.execSQL(createBookingTable);
         db.execSQL(createDateTimeTable);
+        db.execSQL(createBookedDTCTable);
 
         //fill court table
         db.execSQL("begin transaction;");
@@ -62,14 +66,17 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
         String ddate = simpleDateFormat.format(calendar.getTime());
         String[] days = new String[] {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-        //String day_of_week = "bla";
 
         db.execSQL("begin transaction;");
         for (int i = 0; i < 14; i++){
             String day_of_week = days[calendar.get(Calendar.DAY_OF_WEEK) - 1];
-            for (int j = 7; j < 24; j++) {
-                db.execSQL("insert into DATE_TIME(day, ddate, ttime)  values (\"" + day_of_week + "\", \"" + ddate + "\", " + j*100 +");");
-                db.execSQL("insert into DATE_TIME(day, ddate, ttime)  values (\"" + day_of_week + "\", \"" + ddate + "\", " + (j*100+30) +");");
+            for (int j = 7; j < 10; j++) {
+                db.execSQL("insert into DATE_TIME(day, ddate, ttime)  values (\"" + day_of_week + "\", \"" + ddate + "\", \"0" + j +":00\");");
+                db.execSQL("insert into DATE_TIME(day, ddate, ttime)  values (\"" + day_of_week + "\", \"" + ddate + "\", \"0" + j +":30\");");
+            }
+            for (int j = 10; j < 24; j++) {
+                db.execSQL("insert into DATE_TIME(day, ddate, ttime)  values (\"" + day_of_week + "\", \"" + ddate + "\", \"" + j +":00\");");
+                db.execSQL("insert into DATE_TIME(day, ddate, ttime)  values (\"" + day_of_week + "\", \"" + ddate + "\", \"" + j +":30\");");
             }
             calendar.add(Calendar.DATE, 1);
             ddate = simpleDateFormat.format(calendar.getTime());
@@ -251,8 +258,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         String[] whereArgs = new String[]{String.valueOf(userId)};
 
         db.update("USER", values, whereClause, whereArgs);
-
-
     }
 
     @SuppressLint("Range")
@@ -287,6 +292,83 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         db.close();
     }
+
+    public boolean isBooked(int id_court, int id_dt) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "select id_booking from BOOKED_DATE_TIME_COURT where id_dt = \"" + id_dt + "\" and id_court = \"" + id_court + "\";";
+
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.getCount() <= 0){
+            cursor.close();
+            return false;
+        }
+
+        cursor.close();
+        return true;
+    }
+
+    public int addBooking(double cost, int duration, int id_user) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put("cost", cost);
+        cv.put("duration", duration);
+        cv.put("id_user", id_user);
+        //id autoincrement
+
+        long insert = db.insert("BOOKING", null, cv);
+
+        String query = "select id_booking from BOOKING where cost = \"" + cost + "\" and duration = \"" + duration + "\" and id_user = \"" + id_user + "\";";
+        int id_booking = -1;
+
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToLast()) {
+            id_booking = cursor.getInt(0);
+        }
+
+        return id_booking;
+    }
+
+    public int getDateTimeId(String selectedDate, String selectedTime) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "select id_dt from DATE_TIME where ddate = \"" + selectedDate + "\" and ttime = \"" + selectedTime + "\";";
+        int id_dt = -1;
+
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            id_dt = cursor.getInt(0);
+        }
+
+        cursor.close();
+        return id_dt;
+    }
+
+    public String getDateTimeDay(String selectedDate) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "select day from DATE_TIME where ddate = \"" + selectedDate +"\";";
+        String day = "";
+
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            day = cursor.getString(0);
+        }
+
+        return day;
+    }
+
+    public boolean addBookedDateTimeCourt(int dateTimeId, int courtId, int bookingId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put("id_dt", dateTimeId);
+        cv.put("id_court", courtId);
+        cv.put("id_booking", bookingId);
+
+        long insert = db.insert("BOOKED_DATE_TIME_COURT", null, cv);
+
+        return insert != -1;
+    }
+
     public class CourtEntry implements BaseColumns {
         public static final String TABLE_NAME = "court";
 
@@ -296,10 +378,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         public static final String COLUMN_ADDRESS = "address";
         public static final String COLUMN_SPORT = "sport";
 
-
-
         // Add other columns as needed
     }
+
     public ArrayList<Court> getFilteredCourts(String[] selectedSports, int maxDistance) {
         ArrayList<Court> filteredCourts = new ArrayList<>();
 
@@ -400,16 +481,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()){
             //loop through the cursor (the results) and put the results into the return list
             do {
-                int ttime = cursor.getInt(0);
-                String t = (ttime < 1000) ? "0" + (ttime/100) + ":" + (ttime%100)/10 + "0" : (ttime/100) + ":" + (ttime%100)/10 + "0";
-
-                returnList.add(t);
+                String ttime = cursor.getString(0);
+                returnList.add(ttime);
             } while (cursor.moveToNext());
 
         } else {
             //failure - do not add anything to the list
         }
-
         cursor.close();
         db.close();
         return returnList;

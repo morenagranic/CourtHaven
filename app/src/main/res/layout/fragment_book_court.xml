@@ -108,95 +108,55 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="240dp"
             >
+            <RadioGroup
+                android:id="@+id/radioGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-            <RadioButton
-                android:id="@+id/btn_30min"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="6dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginEnd="6dp"
-                android:layout_marginBottom="6dp"
-                android:fontFamily="@font/open_sans_semi_bold"
-                android:text="30 mins"
-                android:textSize="16sp" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:text="10.50 EUR"
-                android:textSize="16sp"
-                android:layout_margin="6dp"
-                android:layout_alignBaseline="@+id/btn_30min"
-                android:fontFamily="@font/open_sans_regular"
-                android:textColor="@color/purple"
-                />
-            <RadioButton
-                android:id="@+id/btn_1hr"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/btn_30min"
-                android:layout_margin="6dp"
-                android:textSize="16sp"
-                android:fontFamily="@font/open_sans_semi_bold"
-                android:text="1 hr"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:text="21.00 EUR"
-                android:textSize="16sp"
-                android:layout_margin="6dp"
-                android:layout_alignBaseline="@+id/btn_1hr"
-                android:fontFamily="@font/open_sans_regular"
-                android:textColor="@color/purple"
-                />
-            <RadioButton
-                android:id="@+id/btn_1hr30min"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/btn_1hr"
-                android:layout_margin="6dp"
-                android:textSize="16sp"
-                android:fontFamily="@font/open_sans_semi_bold"
-                android:text="1 hr 30 mins"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:text="31.50 EUR"
-                android:textSize="16sp"
-                android:layout_margin="6dp"
-                android:layout_alignBaseline="@+id/btn_1hr30min"
-                android:fontFamily="@font/open_sans_regular"
-                android:textColor="@color/purple"
-                />
-            <RadioButton
-                android:id="@+id/btn_2hr"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/btn_1hr30min"
-                android:layout_margin="6dp"
-                android:textSize="16sp"
-                android:fontFamily="@font/open_sans_semi_bold"
-                android:text="2 hr"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:text="42.00 EUR"
-                android:textSize="16sp"
-                android:layout_margin="6dp"
-                android:layout_alignBaseline="@+id/btn_2hr"
-                android:fontFamily="@font/open_sans_regular"
-                android:textColor="@color/purple"
-                />
+                <RadioButton
+                    android:id="@+id/btn_30min"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginBottom="6dp"
+                    android:fontFamily="@font/open_sans_semi_bold"
+                    android:text="30 mins   (10.50 EUR)"
+                    android:textSize="16sp" />
+
+                <RadioButton
+                    android:id="@+id/btn_1hr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="6dp"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/open_sans_semi_bold"
+                    android:text="1 hr  (21.00 EUR)"
+                    />
+                <RadioButton
+                    android:id="@+id/btn_1hr30min"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="6dp"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/open_sans_semi_bold"
+                    android:text="1 hr 30 mins  (31.50 EUR)"
+                    />
+                <RadioButton
+                    android:id="@+id/btn_2hr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="6dp"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/open_sans_semi_bold"
+                    android:text="2 hr  (42.00 EUR)"
+                    />
+            </RadioGroup>
+
         </RelativeLayout>
 
         <TextView

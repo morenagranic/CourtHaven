@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/pic3"
+        android:id="@+id/time_card"
         android:layout_width="60dp"
         android:layout_height="40dp"
         android:layout_margin="2dp"
@@ -17,6 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="11:00"
+            android:textColor="@color/purple"
             android:gravity="center"
             android:textSize="16dp"
             android:fontFamily="@font/open_sans_semi_bold"/>
