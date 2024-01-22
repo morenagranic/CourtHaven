@@ -63,7 +63,4 @@ public class date_timeAdapter extends ArrayAdapter<String> {
         return listItem;
     }
 
-    private void unselectAllExcept(TextView timeText) {
-
-    }
 }

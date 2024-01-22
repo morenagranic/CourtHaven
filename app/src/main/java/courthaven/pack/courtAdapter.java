@@ -22,6 +22,9 @@ import androidx.fragment.app.FragmentActivity;
 import java.util.ArrayList;
 
 public class courtAdapter extends ArrayAdapter<Court> {
+    int[] imageResources = {R.drawable.tennis_court1,R.drawable.basketball_court2,R.drawable.football_court3,R.drawable.basketball_court4,
+            R.drawable.tennis_court5,R.drawable.basketball_court6,R.drawable.tennis_court7,R.drawable.basketball_court8,
+            R.drawable.football_court9,R.drawable.basketball_court10,R.drawable.tennis_court11,R.drawable.basketball_court12};
 
     String selectedDate = new String();
     public String getSelectedDate() { return selectedDate; }
@@ -53,8 +56,10 @@ public class courtAdapter extends ArrayAdapter<Court> {
 
         Court currentCourt = courtsList.get(position);
 
+        currentCourt.setImageDrawable(imageResources[currentCourt.getId()-1]);
+
         ImageView image = listItem.findViewById(R.id.imageView_court);
-        image.setImageResource(currentCourt.getImageDrawable());
+        image.setBackgroundResource(currentCourt.getImageDrawable());
 
         TextView name = (TextView) listItem.findViewById(R.id.court_name);
         name.setText(currentCourt.getName());

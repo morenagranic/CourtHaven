@@ -91,7 +91,8 @@ public class homeFragment extends Fragment {
 
     private void replaceFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.frameLayout, fragment);
+        fragmentTransaction.setCustomAnimations(R.anim.anim_from_bottom, androidx.navigation.ui.R.anim.nav_default_pop_exit_anim)
+                .replace(R.id.frameLayout, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }

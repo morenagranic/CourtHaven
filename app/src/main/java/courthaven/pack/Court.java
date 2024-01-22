@@ -24,7 +24,6 @@ public class Court {
     public String toString() {
         return "Court{" +
                 "id=" + id +
-
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
                 ", sport='" + sport + '\'' +
@@ -36,13 +35,18 @@ public class Court {
         this.id = id;
         this.name = name;
         this.distance = distance;
-
         this.address = address;
         this.sport = sport;
         this.id_admin = id_admin;
     }
 
     public Court() {
+    }
+
+    public Court(int id, String name, String address) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
     }
 
 

@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
 
@@ -34,7 +35,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         String createUserTable = "create table USER (id_user integer primary key autoincrement, name text, description text, email text, password text,courts text, isAdmin boolean);";
         String createCourtTable = "create table COURT (id_court integer primary key autoincrement, name text, address text, sport text, distance integer, id_admin integer, foreign key(id_admin) references USER(id_user));";
-        String createBookingTable = "create table BOOKING (id_booking integer primary key autoincrement, cost real, duration integer, id_user integer, foreign key(id_user) references USER(id_user));";
+        String createBookingTable = "create table BOOKING (id_booking integer primary key autoincrement, code integer, cost real, duration integer, id_user integer, foreign key(id_user) references USER(id_user));";
         String createDateTimeTable = "create table DATE_TIME (id_dt integer primary key autoincrement, day text, ddate text, ttime text);";
         String createBookedDTCTable = "create table BOOKED_DATE_TIME_COURT (id_dt integer, id_court integer, id_booking integer, \n" +
                 "                                      foreign key(id_dt) references DATE_TIME(id_dt),\n" +
@@ -87,9 +88,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     //this is called if the database version number changes, it prevents previous users apps from breaking when you change the database design
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
-    }
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {}
 
     public boolean addUser(User user){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -218,22 +217,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
 
     }
-    private static final String PREFS_NAME = "CourtHavenPrefs";
-
-    // Retrieve user favorites from shared preferences
-    public String getUserFavoritesFromPreferences(Context context, int userId) {
-        SharedPreferences preferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        return preferences.getString("user_" + userId + "_favorites", "");
-    }
-
-    // Update user favorites in shared preferences
-    public void updateUserFavoritesInPreferences(Context context, int userId, String updatedFavorites) {
-        SharedPreferences preferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("user_" + userId + "_favorites", updatedFavorites);
-        editor.apply();
-    }
-
     public int getUserId(String email, String password) {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "select id_user from USER where email = ? and password = ?";
@@ -307,10 +290,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    public int addBooking(double cost, int duration, int id_user) {
+    public int addBooking(int code, double cost, int duration, int id_user) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
+        cv.put("code", code);
         cv.put("cost", cost);
         cv.put("duration", duration);
         cv.put("id_user", id_user);
@@ -318,7 +302,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         long insert = db.insert("BOOKING", null, cv);
 
-        String query = "select id_booking from BOOKING where cost = \"" + cost + "\" and duration = \"" + duration + "\" and id_user = \"" + id_user + "\";";
+        String query = "select id_booking from BOOKING where code = " + code + " and cost = \"" + cost + "\" and duration = \"" + duration + "\" and id_user = \"" + id_user + "\";";
         int id_booking = -1;
 
         Cursor cursor = db.rawQuery(query, null);
@@ -369,17 +353,77 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return insert != -1;
     }
 
-    public class CourtEntry implements BaseColumns {
-        public static final String TABLE_NAME = "court";
+    public ArrayList<Booking> getBookings(int id_user) {
+        ArrayList<Booking> returnList = new ArrayList<>();
 
-        public static final String COLUMN_ID_COURT = "id_court";
+        //get data from the database
+        String query = "SELECT " +
+                "booking.id_booking, booking.code, booking.cost, booking.duration,\n" +
+                "date_time.day, date_time.ddate, date_time.ttime,\n" +
+                "court.id_court, court.name, court.address " +
+                "FROM booking\n" +
+                "JOIN booked_date_time_court ON booking.id_booking = booked_date_time_court.id_booking\n" +
+                "JOIN date_time ON booked_date_time_court.id_dt = date_time.id_dt\n" +
+                "JOIN court ON booked_date_time_court.id_court = court.id_court\n" +
+                "where id_user = "+ id_user +";";
 
-        public static final String COLUMN_NAME = "name";
-        public static final String COLUMN_ADDRESS = "address";
-        public static final String COLUMN_SPORT = "sport";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
 
-        // Add other columns as needed
+        int id_booking = -1;
+        int code;
+        double cost;
+        int duration;
+        String day;
+        String ddate;
+        String ttime;
+        int id_court;
+        String name;
+        String address;
+
+        if (cursor.moveToFirst()) {
+            // Loop through the cursor (the results) and create new court objects, put them into the return list
+            do {
+                if(cursor.getInt(0) != id_booking) {
+                    id_booking = cursor.getInt(0);
+                    code = cursor.getInt(1);
+                    cost = cursor.getDouble(2);
+                    duration = cursor.getInt(3);
+                    day = cursor.getString(4);
+                    ddate = cursor.getString(5);
+                    ttime = cursor.getString(6);
+                    id_court = cursor.getInt(7);
+                    name = cursor.getString(8);
+                    address = cursor.getString(9);
+                } else continue;
+                String timePeriod = formatDate(day, ddate) + ":\n" + ttime + "(" + duration * 30 + " minutes)";
+                Court court = new Court(id_court, name, address);
+
+                Booking newbooking = new Booking(id_booking, code, cost, timePeriod, court);
+
+                returnList.add(newbooking);
+            } while (cursor.moveToNext());
+
+        } else {
+            // Failure - do not add anything to the list
+        }
+
+        cursor.close();
+        db.close();
+        return returnList;
     }
+
+    private String formatDate(String day, String date){
+        String[] months = {
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+        };
+        int numDay = Integer.parseInt(date.split("-")[0]);
+        int index = Integer.parseInt(date.split("-")[1]) - 1;
+
+        return day + ", " + numDay + " " + months[index];
+    }
+
 
     public ArrayList<Court> getFilteredCourts(String[] selectedSports, int maxDistance) {
         ArrayList<Court> filteredCourts = new ArrayList<>();
@@ -488,6 +532,55 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         } else {
             //failure - do not add anything to the list
         }
+        cursor.close();
+        db.close();
+        return returnList;
+    }
+
+    public ArrayList<Court> getCourtsFiltered(String Ids)
+    {
+        // Remove brackets and split by commas
+        String[] stringArray = Ids.replaceAll("\\[|\\]", "").split(",");
+
+        // Convert the array of strings to a list of integers
+        List<Integer> IdsList = new ArrayList<>();
+        for (String str : stringArray) {
+            IdsList.add(Integer.parseInt(str.trim()));
+        }
+        ArrayList<Court> returnList = new ArrayList<>();
+
+        // get data from the database
+        String query = "select * from COURT";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            // Loop through the cursor (the results) and create new court objects, put them into the return list
+            do {
+                @SuppressLint("Range") int id_court = cursor.getInt(cursor.getColumnIndex("id_court"));
+
+                // Check if the court's ID is in the specified idsList
+                if (IdsList.contains(id_court)) {
+                    @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex("name"));
+                    @SuppressLint("Range") String address = cursor.getString(cursor.getColumnIndex("address"));
+                    @SuppressLint("Range") String sport = cursor.getString(cursor.getColumnIndex("sport"));
+                    @SuppressLint("Range") int id_admin = cursor.getInt(cursor.getColumnIndex("id_admin"));
+                    // Retrieve the distance from the cursor
+                    @SuppressLint("Range") int distance = cursor.getInt(cursor.getColumnIndex("distance"));
+
+                    // Create a Court object with the distance
+                    Court newCourt = new Court(id_court, name, address, sport, id_admin, distance);
+                    // Set the distance in the Court object
+
+                    returnList.add(newCourt);
+                }
+            } while (cursor.moveToNext());
+
+        } else {
+            // Failure - do not add anything to the list
+        }
+
         cursor.close();
         db.close();
         return returnList;

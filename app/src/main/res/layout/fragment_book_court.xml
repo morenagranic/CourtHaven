@@ -33,7 +33,7 @@
                     android:id="@+id/imageView_court"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/basketball_court"
+                    android:background="@drawable/basketball_court12"
                     android:contentDescription="basketball court"/>
             </androidx.cardview.widget.CardView>
 

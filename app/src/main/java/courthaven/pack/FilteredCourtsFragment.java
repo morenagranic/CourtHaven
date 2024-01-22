@@ -21,9 +21,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class FilteredCourtsFragment extends Fragment {
-
-
-
     static String selectedDate = homeFragment.getSelectedDate();
     private Context mContext;
     private int maxDistance = 1000; // Default max distance
@@ -38,13 +35,13 @@ public class FilteredCourtsFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
-        Log.d("FilteredCourtsFragment", "onAttach: mContext = " + mContext);
+        //Log.d("FilteredCourtsFragment", "onAttach: mContext = " + mContext);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_filtered_courts, container, false);
-        Log.d("FilteredCourtsFragment", "onCreateView: mContext = " + mContext);
+        //Log.d("FilteredCourtsFragment", "onCreateView: mContext = " + mContext);
 
         // Retrieve selectedSports and maxDistance from arguments
         Bundle args = getArguments();
@@ -57,23 +54,12 @@ public class FilteredCourtsFragment extends Fragment {
 
         ArrayList<Court> filteredCourts = db.getFilteredCourts(selectedSportsArray, maxDistance);
 
-        // Retrieve the favorited courts' IDs for the logged-in user
         int userId = SignInFragment.UserId;
-        String currentUserFavorites = db.getUserFavorites(userId);
-        ArrayList<Integer> favoritedCourtIds = convertStringToIntegerList(currentUserFavorites);
+        courtAdapter adapter = new courtAdapter(mContext, new ArrayList<>());
+        adapter.initializeFavoritedCourtIds(userId);
 
-        // Manually update the favorited state for each court in the filteredCourts list
-        for (Court court : filteredCourts) {
-            court.setFavorite(favoritedCourtIds.contains(court.getId()));
-        }
+        adapter.addAll(filteredCourts);
 
-        // Log the contents of the filteredCourts array
-        for (Court court : filteredCourts) {
-            Log.d("FilteredCourtsFragment", "Filtered Court: " + court.getName() + ", Sport: " + court.getSport() + ", Distance: " + court.getDistance());
-        }
-
-        // Create an instance of courtAdapter
-        courtAdapter adapter = new courtAdapter(mContext, filteredCourts);
 
         // Attach the adapter to the ListView
         ListView listView = rootView.findViewById(R.id.courts_list);

@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Random;
 
 
 public class bookCourtFragment extends Fragment {
@@ -88,6 +89,9 @@ public class bookCourtFragment extends Fragment {
         gridView = view.findViewById(R.id.times_grid);
         gridView.setAdapter(adapter);
 
+        ImageView image = view.findViewById(R.id.imageView_court);
+        image.setBackgroundResource(court.getImageDrawable());
+
         ImageView cancelX = view.findViewById(R.id.cancel_icon1);
         cancelX.setOnClickListener(v -> ((MainActivity) requireActivity()).replaceFragment(new homeFragment()));
 
@@ -96,7 +100,7 @@ public class bookCourtFragment extends Fragment {
 
 
         TextView date1 = view.findViewById((R.id.date_time_text1));
-        date1.setText(selectedDate); //triba dodat dan
+        date1.setText(formatDate(selectedDate));
 
 
         TextView courtName = view.findViewById((R.id.court1));
@@ -156,8 +160,9 @@ public class bookCourtFragment extends Fragment {
         });
 
         totalButton.setOnClickListener(v -> {
-            int bookingId = db.addBooking(cost[0], duration[0], userId);
             if (available[0]) {
+                int code = generateCode();
+                int bookingId = db.addBooking(code, cost[0], duration[0], userId);
                 Toast.makeText(mContext, "Court booked successfully", Toast.LENGTH_LONG).show();
                 for (int i = 0; i < duration[0]; i++) {
                     int dateTimeId = db.getDateTimeId(selectedDate, selectedTime[i]);
@@ -258,5 +263,10 @@ public class bookCourtFragment extends Fragment {
         String day = db.getDateTimeDay(date);
 
         return day + ", " + numDay + " " + months[index];
+    }
+
+    public static int generateCode() {
+        Random random = new Random();
+        return random.nextInt(900000) + 100000;
     }
 }
